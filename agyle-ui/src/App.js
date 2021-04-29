@@ -5,6 +5,7 @@ function App() {
     const [items, setItems] = React.useState(['']);
     const [y, setY] = React.useState(['']);
     const [x, setX] = React.useState(['']);
+   
     React.useEffect(() => {
         async function getTables() {
             const response = await fetch("http://ml.cs.smu.ca:5000/getTables");
@@ -15,25 +16,46 @@ function App() {
     }, []);
 
     const tableChange = (e) => {
-        
         fetch('http://ml.cs.smu.ca:5000/fetchXandY?tableName=' + e.target.value).then(res => res.json()).then(data => {
             setX(data.X.map((x) => ({ name: x, isChecked: false })));
             setY(data.Y.map((y) => ({ name: y, isChecked: false })));
         });
-        //setSelectedTable(e.target.value)
+    }
+    const processXandY = (e) => {
+        let selectedX = [];
+        let selectedY = [];
+        x.filter(x => x.isChecked === true).map(x => selectedX.push(x.name));
+        y.filter(y => y.isChecked === true).map(y => selectedY.push(y.name))
+        let selectedTable = document.getElementById('tableSelect').value;
+        const data = {
+            selectedTable: selectedTable,
+            selectedX: selectedX,
+            selectedY: selectedY
+        };
+        fetch('http://ml.cs.smu.ca:5000/processXandY', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(res => res.json())
+            .then(res => alert('success'));
+    }
+    
+    const onAddingX = (e) => {   
+        x[e].isChecked = !x[e].isChecked;
+        setX(x);
     }
 
-    const onAddingX = (i) => (event) => {
-        this.setState((state, props) => {
-            x[i].isChecked = !x[i].isChecked;
-            setX(x)
-            
-        })
+    const onAddingY = (e) => {
+        y[e].isChecked = !y[e].isChecked;
+        setY(y);
     }
 
     return (
         <div className="App">
-            { items.length > 1 && <select onChange={e => tableChange(e)}>
+            { items.length > 1 && <select id="tableSelect" onChange={e => tableChange(e)}>
                 <option > Select a Table</option>
                 {items.map(item => (
                     <option
@@ -56,9 +78,9 @@ function App() {
                                 <tr key={i + 1}>
                                     <td>{field.name}</td>
                                     <td>
-                                        <div class="checkbox checkbox-circle checkbox-color-scheme">
-                                            <label class="checkbox-checked">
-                                                <input type="checkbox" value={field.name} checked={field.isChecked} onChange={ e => onAddingX(i)} /> <span class="label-text"></span>
+                                        <div >
+                                            <label >
+                                                <input type="checkbox" value={field.name} defaultChecked={field.isChecked} onChange={ e => onAddingX(i)} /> <span ></span>
                                             </label>
                                         </div>
                                     </td>
@@ -75,9 +97,9 @@ function App() {
                                 <tr key={i + 1}>
                                     <td>{field.name}</td>
                                     <td>
-                                        <div class="checkbox checkbox-circle checkbox-color-scheme">
-                                            <label class="checkbox-checked">
-                                                <input type="checkbox" value={field.name} checked={field.isChecked} /> <span class="label-text"></span>
+                                        <div >
+                                            <label >
+                                                <input type="checkbox" value={field.name} defaultChecked={field.isChecked} onChange={e => onAddingY(i)}/> <span ></span>
                                             </label>
                                         </div>
                                     </td>
@@ -89,7 +111,11 @@ function App() {
                 }
                 
             </tr>
-
+            {(x.length > 1 || y.length > 1) && <button onClick={e => processXandY(e)}>
+                Process
+            </button>
+            }
+            
         </div>
         
     );
