@@ -19,6 +19,7 @@ function App() {
     const tableChange = (e) => {
         setX([]);
         setY([]);
+        setAlertName("");
         fetch('http://ml.cs.smu.ca:5000/fetchXandY?tableName=' + e.target.value).then(res => res.json()).then(data => {
             setX(data.X.map((x) => ({ name: x, isChecked: false })));
             setY(data.Y.map((y) => ({ name: y, isChecked: false })));
@@ -44,7 +45,11 @@ function App() {
             body: JSON.stringify(data),
         })
             .then(res => (res.json()))
-            .then(data => console.log(data));
+            .then(data =>
+            {
+                console.log(data);
+                alert(data.auc)
+            });
     }
     
     const onAddingX = (e) => {   
@@ -72,51 +77,55 @@ function App() {
                     </option>
                 ))}
             </select> }
-            <div style={{ marginBottom: "50px" }}>
-                
-            </div>
-            <tr>
-                {x.length >= 1 &&
-                    <td style={{ paddingRight:"250px" }}>
-                        <span> <b>Columns</b></span>
-                        {x.map((field, i) => {
-                            return (
-                                <tr key={i + 1}>
-                                    <td>{field.name}</td>
-                                    <td>
-                                        <div >
-                                            <label >
-                                                <input type="checkbox" value={field.name} defaultChecked={field.isChecked} onChange={ e => onAddingX(i)} /> <span ></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </td>
-                }
-                {y.length >= 1 &&
-                    <td>
-                        <span> <b>Alert Types</b> </span>
-                        {y.map((field, i) => {
-                            return (
-                                <tr key={i + 1}>
-                                    <td>{field.name}</td>
-                                    <td>
-                                        <div >
-                                            <label >
-                                                <input type="radio" value={field.name} checked={alertName === field.name} onChange={e => onAddingY(i)}/> <span ></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )
+            
+            <table>
+                <tbody>
+                    <tr>
+                        {
+                            x.length >= 1 &&
+                            <td style={{ paddingLeft: "250px" }}>
+                            <span> <b>Columns</b></span>
+                            {x.map((field, i) => {
+                                return (                                   
+                                    <tr key={i + 1}>
+                                        <td>{field.name}</td>
+                                        <td>
+                                            <div >
+                                                <label >
+                                                    <input type="checkbox" value={field.name} defaultChecked={field.isChecked} onChange={ e => onAddingX(i)} /> <span ></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>      
+                                )
+                            })}
+                            </td>
                         }
-                            )}
-                    </td>
-                }
+                        {
+                            y.length >= 1 &&
+                            <td style={{ paddingLeft: "150px" }}>
+                            <span> <b>Alert Types</b> </span>
+                            {y.map((field, i) => {
+                                return (                                  
+                                    <tr key={i + 1}>
+                                        <td>{field.name}</td>
+                                        <td>
+                                            <div >
+                                                <label >
+                                                    <input type="radio" value={field.name} checked={alertName === field.name} onChange={e => onAddingY(i)}/> <span ></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                                )}
+                            </td>
+                        }
                 
-            </tr>
+                    </tr>
+                </tbody>
+            </table>
             {(x.length >= 1 || y.length >= 1) && <button onClick={e => processXandY(e)}>
                 Process
             </button>
