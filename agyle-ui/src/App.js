@@ -1,139 +1,21 @@
 import React from 'react';
 import './App.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Home from './Home';
+import Result from './Result';
+
+
+
+
 
 function App() {
-    const [items, setItems] = React.useState([]);
-    const [y, setY] = React.useState([]);
-    const [x, setX] = React.useState([]);
-    const [alertName, setAlertName] = React.useState("")
-   
-    React.useEffect(() => {
-        async function getTables() {
-            const response = await fetch("http://ml.cs.smu.ca:5000/getTables");
-            const data = await response.json();
-            setItems(data.X.map((x) => ({ label: x, value: x })));
-        }
-        getTables();
-    }, []);
-
-    const tableChange = (e) => {
-        setX([]);
-        setY([]);
-        setAlertName("");
-        fetch('http://ml.cs.smu.ca:5000/fetchXandY?tableName=' + e.target.value).then(res => res.json()).then(data => {
-            setX(data.X.map((x) => ({ name: x, isChecked: false })));
-            setY(data.Y.map((y) => ({ name: y, isChecked: false })));
-        });
-    }
-    const processXandY = (e) => {
-        let selectedX = [];
-        let selectedY = [];
-        x.filter(x => x.isChecked === true).map(x => selectedX.push(x.name));
-        y.filter(y => y.isChecked === true).map(y => selectedY.push(y.name))
-        selectedX.push('alert_name')
-        let selectedTable = document.getElementById('tableSelect').value;
-        const data = {
-            selectedTable: selectedTable,
-            selectedX: selectedX,
-            selectedY: alertName
-        };
-        fetch('http://ml.cs.smu.ca:5000/processXandY', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then(res => (res.json()))
-            .then(data =>
-            {
-                console.log(data);
-                alert(data.auc)
-            });
-    }
-    
-    const onAddingX = (e) => {   
-        x[e].isChecked = !x[e].isChecked;
-        setX(x);
-    }
-
-    const onAddingY = (e) => {
-        debugger;
-        if (!y[e].isChecked) {
-            setAlertName(y[e].name);
-        } 
-    }
-
-    return (
-        <div className="App">
-            { items.length >= 1 && <select id="tableSelect" onChange={e => tableChange(e)}>
-                <option > Select a Table</option>
-                {items.map(item => (
-                    <option
-                        key={item.value}
-                        value={item.value}
-                    >
-                        {item.value}
-                    </option>
-                ))}
-            </select> }
-            
-            <table>
-                <tbody>
-                    <tr>
-                        {
-                            x.length >= 1 &&
-                            <td style={{ paddingLeft: "250px" }}>
-                            <span> <b>Columns</b></span>
-                            {x.map((field, i) => {
-                                return (                                   
-                                    <tr key={i + 1}>
-                                        <td>{field.name}</td>
-                                        <td>
-                                            <div >
-                                                <label >
-                                                    <input type="checkbox" value={field.name} defaultChecked={field.isChecked} onChange={ e => onAddingX(i)} /> <span ></span>
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>      
-                                )
-                            })}
-                            </td>
-                        }
-                        {
-                            y.length >= 1 &&
-                            <td style={{ paddingLeft: "150px" }}>
-                            <span> <b>Alert Types</b> </span>
-                            {y.map((field, i) => {
-                                return (                                  
-                                    <tr key={i + 1}>
-                                        <td>{field.name}</td>
-                                        <td>
-                                            <div >
-                                                <label >
-                                                    <input type="radio" value={field.name} checked={alertName === field.name} onChange={e => onAddingY(i)}/> <span ></span>
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            }
-                                )}
-                            </td>
-                        }
-                
-                    </tr>
-                </tbody>
-            </table>
-            {(x.length >= 1 || y.length >= 1) && <button onClick={e => processXandY(e)}>
-                Process
-            </button>
-            }
-            
-        </div>
-        
+    return (   
+        <BrowserRouter>
+            <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/Result" component={Result} />   
+            </Switch>
+        </BrowserRouter>       
     );
- 
  }
 export default App;
