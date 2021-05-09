@@ -58,7 +58,7 @@ const Home = () => {
                 history.push("/Result")
                 history.push({
                     pathname: '/Result',
-                    state: { auc: data.auc }
+                    state: { auc: data.auc, vimp: JSON.parse(data.vimp) }
                 });
             });
     }
@@ -77,8 +77,8 @@ const Home = () => {
     return (
 
         <div>
-               
-                {items.length >= 1 && <select id="tableSelect" onChange={e => tableChange(e)}>
+
+            {items.length >= 1 && <select id="tableSelect" style={{marginLeft:"300px" }} onChange={e => tableChange(e)}>
                     <option > Select a Table</option>
                     {items.map(item => (
                         <option
@@ -140,7 +140,7 @@ const Home = () => {
                         </tr>
                     </tbody>
             </table>
-            {(x.length >= 1 || y.length >= 1) && <button onClick={e => processXandY()}>
+            {(x.length >= 1 || y.length >= 1) && <button style={{ marginLeft: "400px" }} onClick={e => processXandY()}>
                     Process
             </button>
                 }
