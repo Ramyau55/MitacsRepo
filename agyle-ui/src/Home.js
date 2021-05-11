@@ -34,7 +34,7 @@ const Home = () => {
         setMsg([]);
         x.filter(x => x.isChecked === true).map(x => selectedX.push(x.name));
         y.filter(y => y.isChecked === true).map(y => selectedY.push(y.name))
-        selectedX.push('alert_name')
+        if(!selectedX.includes('alert_name')) selectedX.push('alert_name')
         let selectedTable = document.getElementById('tableSelect').value;
         const data = {
             selectedTable: selectedTable,
@@ -53,7 +53,7 @@ const Home = () => {
             .then(data => {
                 var messageString = JSON.stringify(data.message);
                 console.log(data);
-                alert(data.auc);
+                alert(messageString);
                 setMsg(messageString);
                 history.push("/Result")
                 history.push({

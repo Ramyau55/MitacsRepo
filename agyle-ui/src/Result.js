@@ -13,10 +13,8 @@ function Result() {
         console.log(location); 
         if (location.state) {
             setAuc(location.state.auc);
-            //console.log(location.state.vimp.importance);
             let data = [];           
             Object.keys(location.state.vimp.importance).map(key => data.push({ name: key, value: location.state.vimp.importance[key] }))
-            //console.log(data)
             setImportance(data);
         }
 
