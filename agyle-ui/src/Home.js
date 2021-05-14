@@ -36,13 +36,13 @@ const Home = () => {
         y.filter(y => y.isChecked === true).map(y => selectedY.push(y.name))
         if(!selectedX.includes('alert_name')) selectedX.push('alert_name')
         let selectedTable = document.getElementById('tableSelect').value;
-        let performClean = document.getElementById('processClean').checked;
+        let processClean = document.getElementById('processClean').checked;
 
         const data = {
             selectedTable: selectedTable,
             selectedX: selectedX,
             selectedY: alertName,
-            processClean: performClean
+            processClean: processClean
         };
        
         fetch('http://ml.cs.smu.ca:5000/processXandY', {
