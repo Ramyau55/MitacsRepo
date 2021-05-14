@@ -36,10 +36,13 @@ const Home = () => {
         y.filter(y => y.isChecked === true).map(y => selectedY.push(y.name))
         if(!selectedX.includes('alert_name')) selectedX.push('alert_name')
         let selectedTable = document.getElementById('tableSelect').value;
+        let performClean = document.getElementById('processClean').checked;
+
         const data = {
             selectedTable: selectedTable,
             selectedX: selectedX,
-            selectedY: alertName
+            selectedY: alertName,
+            processClean: performClean
         };
        
         fetch('http://ml.cs.smu.ca:5000/processXandY', {
@@ -53,9 +56,8 @@ const Home = () => {
             .then(data => {
                 var messageString = JSON.stringify(data.message);
                 console.log(data);
-                alert(messageString);
+                if (messageString !== "{}") alert(messageString);
                 setMsg(messageString);
-                history.push("/Result")
                 history.push({
                     pathname: '/Result',
                     state: { auc: data.auc, vimp: JSON.parse(data.vimp) }
@@ -140,9 +142,15 @@ const Home = () => {
                         </tr>
                     </tbody>
             </table>
-            {(x.length >= 1 || y.length >= 1) && <button style={{ marginLeft: "400px" }} onClick={e => processXandY()}>
+            {(x.length >= 1 || y.length >= 1) &&
+                <div style={{ marginLeft: "400px" }} >
+                <span> Clean the data before processing</span>
+                <input id="processClean" type="checkbox" defaultChecked={true} /> <span ></span>
+                
+                <button onClick={e => processXandY()}>
                     Process
             </button>
+                </div>
                 }
         </div>
         )

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { BarChart, Bar, PieChart, Pie, Tooltip, Legend, XAxis, YAxis} from 'recharts';
+import { BarChart, Bar, PieChart, Pie, Tooltip, Cell, Legend, XAxis, YAxis} from 'recharts';
 
 
 function Result() {
@@ -32,9 +32,14 @@ function Result() {
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-                    fill="#8884d8"
+                    
+                    //fill="#8884d8"
                     label
-                />
+                >
+                    {importance.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={'#' + Math.floor(Math.random() * 16777215).toString(16)} />
+                    ))}
+                </Pie>
                 
                 <Tooltip />
             </PieChart>
