@@ -69,12 +69,18 @@ const Home = () => {
         }
     }
 
-   /* const selectAllX = (e) => {
-
-        setX(x.map((x) => ({ name: x, isChecked: true })));
-   
+    const selectAllX = (e) => {   
+        debugger;
+         
+        setX([]);      
+        fetch('http://ml.cs.smu.ca:5000/fetchXandY?tableName=' + document.getElementById('tableSelect').value).then(res => res.json()).then(data => {
+            setX(data.X.map((x) => ({
+                name: x, isChecked: document.getElementById('selectAllX').checked
+ })));
+           
+        });
                    
-    }*/
+    }
 
     const onAddingX = (e) => {
         x[e].isChecked = !x[e].isChecked;
@@ -156,10 +162,10 @@ const Home = () => {
             {(x.length >= 1 || y.length >= 1) &&
 
                 <div >
-                {/*<div style={{ marginLeft: "255px" }}>
+                <div style={{ marginLeft: "255px" }}>
                     <span>Select All</span>
                     <input onClick={e => selectAllX()} id="selectAllX" type="checkbox" defaultChecked={false} /> <span ></span>
-                </div>*/}
+                </div>
                 <div style={{ marginLeft: "400px" }}>
                     <span> Clean the data before processing</span>
                     <input id="processClean" type="checkbox" defaultChecked={true} /> <span ></span>
