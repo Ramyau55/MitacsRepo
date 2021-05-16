@@ -21,19 +21,18 @@ function Result() {
     }, [location]);
 
     return (
-        <div>
-            <h2> auc value: { auc} </h2>
-            <h2> Selected Columns and Importance </h2>
-            <PieChart width={1000} height={400}>
+        <div style={{ marginLeft: "200px" }}>
+            <label style={{ color: "blue", fontSize: "26px" }}> auc value: {auc} </label>
+            <h3 style={{ textDecorationLine: 'underline' }}> Pie Chart Representation of Selected Columns Vs Importance</h3>
+            
+            <PieChart style={{ paddingTop: "100px" }} width={1000} height={400}>
                 <Pie
                     dataKey="value"
                     isAnimationActive={false}
                     data={importance}
                     cx="50%"
                     cy="50%"
-                    outerRadius={80}
-                    
-                    //fill="#8884d8"
+                    outerRadius={200}
                     label
                 >
                     {importance.map((entry, index) => (
@@ -43,12 +42,21 @@ function Result() {
                 
                 <Tooltip />
             </PieChart>
-            <BarChart width={700} height={500} data={importance}>
+
+            <h3 style={{ textDecorationLine: 'underline' }}> Bar chart Representation of Selected Columns Vs Importance</h3>
+
+            <BarChart style={{ paddingTop: "100px" }} width={1000} height={500} data={importance}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="value" fill="#8884d8" />
+              
+                <Bar dataKey="value">
+                    {importance.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={'#' + Math.floor(Math.random() * 16777215).toString(16)} />
+                    ))}
+                </Bar>
+                
             </BarChart>
         </div>
     );

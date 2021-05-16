@@ -34,7 +34,6 @@ const Home = () => {
         setMsg([]);
         x.filter(x => x.isChecked === true).map(x => selectedX.push(x.name));
         y.filter(y => y.isChecked === true).map(y => selectedY.push(y.name))
-        if(!selectedX.includes('alert_name')) selectedX.push('alert_name')
         let selectedTable = document.getElementById('tableSelect').value;
         let processClean = document.getElementById('processClean').checked;
 
@@ -44,26 +43,38 @@ const Home = () => {
             selectedY: alertName,
             processClean: processClean
         };
-       
-        fetch('http://ml.cs.smu.ca:5000/processXandY', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then(res => (res.json()))
-            .then(data => {
-                var messageString = JSON.stringify(data.message);
-                console.log(data);
-                if (messageString !== "{}") alert(messageString);
-                setMsg(messageString);
-                history.push({
-                    pathname: '/Result',
-                    state: { auc: data.auc, vimp: JSON.parse(data.vimp) }
+        
+        if (alertName != "" && selectedX.length > 0) {
+            if (!selectedX.includes('alert_name')) selectedX.push('alert_name')
+            fetch('http://ml.cs.smu.ca:5000/processXandY', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(res => (res.json()))
+                .then(data => {
+                    var messageString = JSON.stringify(data.message);
+                    console.log(data);
+                    if (messageString !== "{}") alert(messageString);
+                    setMsg(messageString);
+                    history.push({
+                        pathname: '/Result',
+                        state: { auc: data.auc, vimp: JSON.parse(data.vimp) }
+                    });
                 });
-            });
+        } else {
+            alert("Please select minimum of one column names and one alert types ")
+        }
     }
+
+   /* const selectAllX = (e) => {
+
+        setX(x.map((x) => ({ name: x, isChecked: true })));
+   
+                   
+    }*/
 
     const onAddingX = (e) => {
         x[e].isChecked = !x[e].isChecked;
@@ -143,13 +154,20 @@ const Home = () => {
                     </tbody>
             </table>
             {(x.length >= 1 || y.length >= 1) &&
-                <div style={{ marginLeft: "400px" }} >
-                <span> Clean the data before processing</span>
-                <input id="processClean" type="checkbox" defaultChecked={true} /> <span ></span>
+
+                <div >
+                {/*<div style={{ marginLeft: "255px" }}>
+                    <span>Select All</span>
+                    <input onClick={e => selectAllX()} id="selectAllX" type="checkbox" defaultChecked={false} /> <span ></span>
+                </div>*/}
+                <div style={{ marginLeft: "400px" }}>
+                    <span> Clean the data before processing</span>
+                    <input id="processClean" type="checkbox" defaultChecked={true} /> <span ></span>
                 
-                <button onClick={e => processXandY()}>
-                    Process
-            </button>
+                    <button onClick={e => processXandY()}>
+                        Process
+                    </button>
+                </div>
                 </div>
                 }
         </div>
