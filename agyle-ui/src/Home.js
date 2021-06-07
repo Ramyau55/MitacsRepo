@@ -69,6 +69,47 @@ const Home = () => {
         }
     }
 
+    const processValues = (e) => {
+        let selectedX = [];
+        let selectedY = [];
+        setMsg([]);
+        x.filter(x => x.isChecked === true).map(x => selectedX.push(x.name));
+        y.filter(y => y.isChecked === true).map(y => selectedY.push(y.name))
+        let selectedTable = document.getElementById('tableSelect').value;
+        let processClean = document.getElementById('processClean').checked;
+
+        const data = {
+            selectedTable: selectedTable,
+            selectedX: selectedX,
+            selectedY: alertName,
+            processClean: processClean
+        };
+        
+        if (alertName != "" && selectedX.length > 0) {
+            if (!selectedX.includes('alert_name')) selectedX.push('alert_name')
+            fetch('http://ml.cs.smu.ca:5000/processXandY', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(res => (res.json()))
+                .then(data => {
+                    var messageString = JSON.stringify(data.message);
+                    console.log(data);
+                    if (messageString !== "{}") alert(messageString);
+                    setMsg(messageString);
+                    history.push({
+                        pathname: '/Result',
+                        state: { auc: data.auc, vimp: JSON.parse(data.vimp) }
+                    });
+                });
+        } else {
+            alert("Please select minimum of one column names and one alert types ")
+        }
+    }
+
     const selectAllX = (e) => {   
         debugger;
          
