@@ -4,16 +4,13 @@ import "./index.css";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import App from "./App";
 import DisplayFeatures from './DisplayFeatures/displayFeatures';
-
+import Header from "./Header/header.js";
 
 const routing = (
-  <Router>
-    <div>      
-      <hr />
+  <Router>     
       <Switch>
         <Route exact path="/" component={App} />       
       </Switch>      
-    </div>
   </Router>
 );
 

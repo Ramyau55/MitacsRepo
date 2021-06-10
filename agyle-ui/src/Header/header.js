@@ -4,14 +4,25 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../css/bootstrap.min.css';
 import '../css/bootstrap-theme.css';
 import '../css/elegant-icons-style.css';
- import '../css/style.css';
-import '../css/style-responsive.css';
+import '../css/style.css';
+import { useHistory } from 'react-router-dom';
+//import '../css/style-responsive.css';
 
 
 function Header() {
-  return (
-    <div className="header-dark">       
-        <header className="header header--fixed header--scrolling">
+    let history = useHistory();
+
+    const showHome = (e) => {
+        history.push({
+            pathname: '/'
+        });
+    }
+
+  return (  
+        <header className="header header-dark header--fixed header--scrolling">
+        <div class="toggle-nav">
+            <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
+        </div>
         <div className="row"> 
         <div className="col-sm-6 col-md-3 item">
             <div className="header__inner container">
@@ -28,12 +39,12 @@ function Header() {
                 <span className="header_title">Tracking Community Movements</span>              
             </div>
             <div className="col-sm-6 col-md-3  header_padding">
-                <span className="header_home">Home</span>              
+                <button  onClick={e => showHome()} className="btn btn-primary header_home">Home</button>              
             </div>             
             </div>
 	    
-</header>
-</div>
+</header> 
+
   );
 }
 export default Header;
