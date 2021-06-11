@@ -72,6 +72,7 @@ const DisplayFeatures = () => {
         
 
         if (selectedY.length > 0 && selectedX.length > 0) {
+            debugger;
             if (!selectedX.includes('alert_name')) selectedX.push('alert_name')
             fetch('http://ml.cs.smu.ca:5000/processXandY', {
                 method: 'POST',
