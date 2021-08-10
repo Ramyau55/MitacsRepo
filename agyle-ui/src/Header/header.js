@@ -20,8 +20,8 @@ function Header() {
 
   return (  
         <header className="header header-dark header--fixed header--scrolling">
-        <div class="toggle-nav">
-            <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
+        <div className="toggle-nav">
+            <div className="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i className="icon_menu"></i></div>
         </div>
         <div className="row"> 
         <div className="col-sm-6 col-md-3 item">

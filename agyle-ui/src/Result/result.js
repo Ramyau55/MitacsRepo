@@ -2,7 +2,34 @@ import React from 'react';
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useHistory } from 'react-router-dom';
-import { BarChart, Bar, PieChart, Pie, Tooltip, Cell, Legend, XAxis, YAxis} from 'recharts';
+import './result.css';
+// import { BarChart, Bar, PieChart, Pie, Tooltip, Cell, Legend, XAxis, YAxis} from 'recharts';
+import { PureComponent } from 'react';
+import {
+  ComposedChart,
+  Line,
+  Area,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  Cell,
+  ResponsiveContainer,
+} from 'recharts';
+// import {
+//     ComposedChart,
+//     Line,
+//     Bar,
+//     XAxis,
+//     YAxis,
+//     CartesianGrid,
+//     Tooltip,
+//     Legend,
+//     Area
+//   } from "recharts";
+
 
 
 function Result() {
@@ -22,7 +49,7 @@ function Result() {
         }
 
     }, [location]);
-
+      
     const backToFeatures = () => {
         debugger;
         history.push({
@@ -31,47 +58,71 @@ function Result() {
         });
     }
 
+    const formatter = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+
     return (
-        <div style={{ marginLeft: "200px", paddingTop:"10%" }}>
+        <div style={{ paddingTop:"10%" }}>
              <button className="btn btn-secondary" onClick={e => backToFeatures()}>
                     Back
             </button>
-            {/* <label style={{ color: "blue", fontSize: "26px" }}> auc value: {auc} </label> */}
-            <h3 style={{ textDecorationLine: 'underline' }}> Pie Chart Representation of Selected Columns Vs Importance</h3>
-            <div style={{ paddingBottom:"10%"}} >
-            <PieChart style={{ paddingTop: "100px" }} width={1000} height={500}>
-                <Pie
-                    dataKey="value"
-                    isAnimationActive={false}
-                    data={importance}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={200}
-                    label
-                >
-                    {importance.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={'#' + Math.floor(Math.random() * 16777215).toString(16)} />
-                    ))}
-                </Pie>
-                
-                <Tooltip />
-            </PieChart>
+            <div style={{ width:"100%", display:"flex",flexDirection: "row" }}>
+            <div style={{ width:"70%" ,marginLeft:"2%"}}>
+            {/* <PieChart width={600} height={500}>
+                        <Pie
+                            dataKey="value"
+                            isAnimationActive={false}
+                            data={importance}
+                            cx="50%"
+                            cy="50%"
+                           
+                            label
+                        >
+                            {importance.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={'#' + Math.floor(Math.random() * 16777215).toString(16)} />
+                            ))}
+                        </Pie>
+                        
+                        <Tooltip />
+                    </PieChart> */}
+                          
+        <ComposedChart
+          layout="vertical"
+          width={800}
+          height={500}
+          data={importance}
+          margin={{
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 20,
+          }}
+        >
+          <CartesianGrid stroke="#f5f5f5" />
+          <XAxis type="number" />
+          <YAxis dataKey="name" type="category" width={300} scale="band" />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="value">
+                            {importance.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={'#' + Math.floor(Math.random() * 16777215).toString(16)} />
+                            ))}
+                        </Bar> 
+        </ComposedChart>
+     
+                    
             </div>
-            <h3 style={{ textDecorationLine: 'underline' }}> Bar chart Representation of Selected Columns Vs Importance</h3>
-
-            <BarChart width={1000} height={500} data={importance}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-              
-                <Bar dataKey="value">
-                    {importance.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={'#' + Math.floor(Math.random() * 16777215).toString(16)} />
-                    ))}
-                </Bar>
-                
-            </BarChart>
+            <div style={{ width:"50%" }}>
+                <div className="imp_info">
+                <p>AUC: {formatter.format(Number(auc))}</p>
+                <p>Highest Importance</p>
+                <div>Lowest Importance</div>
+                </div>
+            
+            </div>
+            </div>
         </div>
     );
 }
