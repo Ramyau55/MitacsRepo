@@ -30,7 +30,20 @@ import {
 //     Area
 //   } from "recharts";
 
+import TooltipRC from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap_white.css';
 
+const auc_styles = {
+    height: '100px',
+    width: '500px',
+    display: 'inline-block',
+    fontSize:'16px'
+  };
+const AUC_text = <span style={auc_styles}>
+AUC or ROC curve is a plot of the proportion of true positives (events correctly predicted to be events) versus the proportion of false positives (nonevents wrongly predicted to be events) at different probability cutoffs. 
+True Positive Rate is also called Sensitivity. False Positive Rate is also called (1-Specificity). 
+Sensitivity is on Y-axis and (1-Specificity) is on X-axis. Higher the AUC score, better the model.
+</span>;
 
 function Result() {
     const location = useLocation();
@@ -51,7 +64,6 @@ function Result() {
     }, [location]);
       
     const backToFeatures = () => {
-        debugger;
         history.push({
             pathname: '/DisplayFeatures',
             state: { selectedTable: table}
@@ -116,9 +128,15 @@ function Result() {
             </div>
             <div style={{ width:"50%" }}>
                 <div className="imp_info">
-                <p>AUC: {formatter.format(Number(auc))}</p>
-                <p>Highest Importance</p>
-                <div>Lowest Importance</div>
+                <p>AUC : {formatter.format(Number(auc))}<TooltipRC
+                    placement="left"
+                    overlay={AUC_text}
+                    arrowContent={<div className="rc-tooltip-arrow-inner"></div>}
+                >
+                    <a href="#"> ?</a>
+                </TooltipRC></p>
+                <p>Highest Importance: {Math.max(...importance.map((a) => a.value))}</p>
+                <div>Lowest Importance: {Math.min(...importance.map((a) => a.value))}</div>
                 </div>
             
             </div>

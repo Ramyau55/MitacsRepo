@@ -110,9 +110,7 @@ const Home = () => {
         }
     }
 
-    const selectAllX = (e) => {   
-        debugger;
-         
+    const selectAllX = (e) => {  
         setX([]);      
         fetch('http://ml.cs.smu.ca:5000/fetchXandY?tableName=' + document.getElementById('tableSelect').value).then(res => res.json()).then(data => {
             setX(data.X.map((x) => ({

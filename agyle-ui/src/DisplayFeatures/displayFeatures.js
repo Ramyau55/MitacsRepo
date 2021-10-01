@@ -5,8 +5,32 @@ import Select from 'react-select';
 import MultiSelect from "@kenshooui/react-multi-select";
 import "@kenshooui/react-multi-select/dist/style.css"
 import './displayFeatures.css';
+import Spinner from "react-bootstrap/Spinner";
+import Tooltip from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap_white.css';
 
+const tooltipstyles = {
+    height: '100px',
+    width: '500px',
+    display: 'inline-block',
+    fontSize:'18px'
+  };
+  
+const text = <span style={tooltipstyles}>Eliminate any attributes that have too many distinct values (such as comments)
+    also Eliminate attributes that have all or 95% NULL values when Alert is not NULL.As they are unlikely to be good predictors.
+</span>;
 
+const styles = {
+    display: 'table-cell',
+    height: '60px',
+    width: '80px',
+    textAlign: 'center',
+    background: '#f6f6f6',
+    verticalAlign: 'middle',
+    border: '5px solid white',
+  };
+  
+ 
 const DisplayFeatures = () => {
     const location = useLocation();
     const [y, setY] = React.useState([]);
@@ -15,6 +39,8 @@ const DisplayFeatures = () => {
     const [selectedAlert, setSelectedAlert] = React.useState(null);
     const [selectedFeature, setSelectedFeature] = React.useState([]);
     const [msg, setMsg] = React.useState([]);
+    const [loading, setLoading] = React.useState([false]);
+
     let history = useHistory();
 
     React.useEffect(() => {
@@ -54,10 +80,10 @@ const DisplayFeatures = () => {
     const [toggle, setToggle] = React.useState(false);
 
     const triggerToggle = () => {
-        debugger;
         setToggle( !toggle )
     };
     const processValues = (e) => {
+        setLoading(true);
         let selectedX = [];
         let selectedY = [];
         setMsg([]);
@@ -72,7 +98,6 @@ const DisplayFeatures = () => {
         
 
         if (selectedY.length > 0 && selectedX.length > 0) {
-            debugger;
             if (!selectedX.includes('alert_name')) selectedX.push('alert_name')
             fetch('http://ml.cs.smu.ca:5000/processXandY', {
                 method: 'POST',
@@ -85,12 +110,24 @@ const DisplayFeatures = () => {
                 .then(data => {
                     var messageString = JSON.stringify(data.message);
                     console.log(data);
-                    if (messageString !== "{}") window.confirm(messageString);
-                    setMsg(messageString);
-                    history.push({
-                        pathname: '/Result',
-                        state: { auc: data.auc, vimp: JSON.parse(data.vimp),selectedTable:selectedTable }
-                    });
+                    if (messageString !== "{}") 
+                    {
+                        if(window.confirm(messageString)) {
+                            setMsg(messageString);
+                            history.push({
+                                pathname: '/Result',
+                                state: { auc: data.auc, vimp: JSON.parse(data.vimp),selectedTable:selectedTable }
+                            });
+                        } else {                         
+                            setLoading(false);
+                        }
+                    } else {
+                        //alert(1)
+                        history.push({
+                            pathname: '/Result',
+                            state: { auc: data.auc, vimp: JSON.parse(data.vimp),selectedTable:selectedTable }
+                        });
+                    }
                 });
         } else {
             alert("Please select minimum of one column names and one alert types ")
@@ -120,7 +157,14 @@ const DisplayFeatures = () => {
                 }
             </div>
             <div className="clean_data_div">
-                <span>Do you like to Clean the Data? </span>
+                <span>Do you like to Clean the Data </span>
+                <Tooltip
+                    placement="left"
+                    overlay={text}
+                    arrowContent={<div className="rc-tooltip-arrow-inner"></div>}
+                >
+                    <a href="#">? </a>
+                </Tooltip>
                 <div onClick={triggerToggle} className={`wrg-toggle ${toggle ? 'wrg-toggle--checked' : ''}` }>
                     <div className="wrg-toggle-container">
                         <div className="wrg-toggle-check">
@@ -137,6 +181,7 @@ const DisplayFeatures = () => {
             <button className="process_btn btn btn-primary" onClick={e => processValues()}>
                     Process
             </button>
+            {loading == true && <Spinner animation="border" /> }
         </div>
         
     )
