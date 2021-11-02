@@ -14,7 +14,9 @@ const Home = () => {
         async function getTables() {
             const response = await fetch("http://ml.cs.smu.ca:5000/getTables");
             const data = await response.json();
-            setItems(data.X.map((x) => ({ label: x, value: x })));
+            debugger;
+            //setItems(data.X.map((x) => ({ label: x, value: x })));
+            setItems(data.X.map((x) => ({ tabel: x.table_name, xcount: x.xtotal, ycount: x.ytotal })));
             setIsLoading(false);
         }
         getTables();
@@ -50,7 +52,7 @@ const Home = () => {
                     onChange={e => handlePageChange(e)}
                 />
                 {getPaginatedData().map(data => (
-                    <button onClick={e => tableValues(data.value)} className="list-group-item list-group-item-action" key={data.value}> {data.value}</button>
+                    <div><button onClick={e => tableValues(data.tabel)} className="list-group-item list-group-item-action" key={data.tabel}> {data.tabel + " ( Total X: " + data.xcount + ", Total Y: " + data.ycount +" )"}</button></div>
                 ))}
         </div>}
     </div>

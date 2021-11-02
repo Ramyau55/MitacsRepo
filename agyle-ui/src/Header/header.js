@@ -33,7 +33,7 @@ function Header() {
             </div>  
             </div>           
             <div className="col-sm-6 col-md-6  header_padding">
-                <span className="header_title">Tracking Community Movements</span>              
+                <span className="header_title">Machine Learning For Surveys</span>              
             </div>
             <div className="col-sm-6 col-md-3  header_padding">
                 <button  onClick={e => showHome()} className="btn btn-primary header_home">Home</button>              

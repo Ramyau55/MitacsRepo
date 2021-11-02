@@ -15,21 +15,12 @@ const tooltipstyles = {
     display: 'inline-block',
     fontSize:'18px'
   };
-  
+
 const text = <span style={tooltipstyles}>Eliminate any attributes that have too many distinct values (such as comments)
     also Eliminate attributes that have all or 95% NULL values when Alert is not NULL.As they are unlikely to be good predictors.
 </span>;
 
-const styles = {
-    display: 'table-cell',
-    height: '60px',
-    width: '80px',
-    textAlign: 'center',
-    background: '#f6f6f6',
-    verticalAlign: 'middle',
-    border: '5px solid white',
-  };
-  
+ 
  
 const DisplayFeatures = () => {
     const location = useLocation();
@@ -166,12 +157,12 @@ const DisplayFeatures = () => {
                     <a href="#">? </a>
                 </Tooltip>
                 <div onClick={triggerToggle} className={`wrg-toggle ${toggle ? 'wrg-toggle--checked' : ''}` }>
-                    <div className="wrg-toggle-container">
-                        <div className="wrg-toggle-check">
-                            <span>🌜</span>
+                    <div style={{backgroundColor:'green'}} className="wrg-toggle-container">
+                        <div  lassName="wrg-toggle-check">
+                            <span style={{color:'orange',fontSize:'11px'}}>&nbsp; Yes</span>
                         </div>
                         <div className="wrg-toggle-uncheck">
-                            <span>🌞</span>
+                            <span style={{color:'yellow',fontSize:'11px'}}>No</span>
                         </div>
                     </div>
                     <div className="wrg-toggle-circle"></div>
