@@ -1,6 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Pagination from "react-js-pagination";
+import TooltipRC from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap_white.css';
 import './home.css';
 
 const Home = () => {
@@ -8,7 +10,7 @@ const Home = () => {
     let history = useHistory();
     const[isLoading,setIsLoading] = React.useState(true);
     const[activePage,setActivePage] = React.useState(1);
-    
+    document.getElementById('home_icon').hidden = false;
 
     React.useEffect(() => {
         async function getTables() {
@@ -52,7 +54,14 @@ const Home = () => {
                     onChange={e => handlePageChange(e)}
                 />
                 {getPaginatedData().map(data => (
-                    <div><button onClick={e => tableValues(data.tabel)} className="list-group-item list-group-item-action" key={data.tabel}> {data.tabel + " ( Total X: " + data.xcount + ", Total Y: " + data.ycount +" )"}</button></div>
+                <TooltipRC
+                    placement="left"
+                    overlay={" ( X Count: " + data.xcount + ", Y Count: " + data.ycount +" )"}
+                    arrowContent={<div className="rc-tooltip-arrow-inner"></div>}
+                >
+                    {/* <button onClick={e => tableValues(data.tabel)} className="list-group-item list-group-item-action" key={data.tabel}> {data.tabel + " ( Total X: " + data.xcount + ", Total Y: " + data.ycount +" )"}</button> */}
+                    <button onClick={e => tableValues(data.tabel)} className="list-group-item list-group-item-action" key={data.tabel}> {data.tabel}</button>
+                </TooltipRC>
                 ))}
         </div>}
     </div>

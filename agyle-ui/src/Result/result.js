@@ -128,7 +128,7 @@ function Result() {
             </div>
             <div style={{ width:"50%" }}>
                 <div className="imp_info">
-                <p>AUC : {formatter.format(Number(auc))}<TooltipRC
+                <p>AUC (A Measure of Accuracy) : {formatter.format(Number(auc))}<TooltipRC
                     placement="left"
                     overlay={AUC_text}
                     arrowContent={<div className="rc-tooltip-arrow-inner"></div>}

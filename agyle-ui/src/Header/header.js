@@ -14,7 +14,7 @@ function Header() {
 
     const showHome = (e) => {
         history.push({
-            pathname: '/'
+            pathname: '/Home'
         });
     }
 
@@ -24,7 +24,7 @@ function Header() {
         <div className="col-sm-6 col-md-3 item">
             <div className="header__inner container">
                 <h1 className="header__logo-wrapper">
-                    <ul className="logo">
+                    <ul className="logo">6
                     <a  href="/">
                         <img  src="https://www.agyleintelligence.com/wp-content/themes/agyleintelligence/dist/assets/images/logo.svg" alt="Agyle Intelligence" className="header__logo" /> <span className="header__logo-text">Agyle Intelligence</span>
                     </a>
@@ -36,7 +36,7 @@ function Header() {
                 <span className="header_title">Machine Learning For Surveys</span>              
             </div>
             <div className="col-sm-6 col-md-3  header_padding">
-                <button  onClick={e => showHome()} className="btn btn-primary header_home">Home</button>              
+                <button  id="home_icon" hidden="true" onClick={e => showHome()} className="btn btn-primary header_home">Home</button>              
             </div>             
             </div>
 	    
