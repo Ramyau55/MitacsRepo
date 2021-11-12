@@ -56,7 +56,7 @@ const DisplayFeatures = () => {
     
     const displayHome = (e) => {
         history.push({
-            pathname: '/'
+            pathname: '/Home'
         });
     }
 
